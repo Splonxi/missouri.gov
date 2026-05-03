@@ -1,5 +1,33 @@
 [
   {
+    "id": "stmt-2026-05-3-coronavirus",
+    "title": "Statement On The COVID-19 Pandemic",
+    "date": "2020-02-01",
+    "category": "Health / Public Safety",
+    "summary": "Statement from the office of Governor Montgomery on the looming threat that the coronavirus is bringing, and the steps being taken to ameliorate it in Washington.",
+    "body": [
+      "As we are all aware, a novel respiratory virus known as COVID-19 has begun spreading internationally and has now been identified in the United States, including on the West Coast. The State of Washington must take immediate and comprehensive action to mitigate transmission and protect public health",
+      "I have spent my entire life in medicine. In the recently enacted state budget, we appropriated over 76 billion dollars for the Washington Department of Health and Human Services over the next fiscal year. Seventeen billion of that was for public health preparedness, R&D, and risk mitigation.",
+      "I have just recently signed an order accessing those funds for the purpose of managing the coronavirus pandemic. We are pledging a five billion dollar research donation stipend to assist in developing a vaccine for the coronavirus, in collaboration with university research departments and the federal government, as well as the rest of the money being redirected to Washington's emergency management and healthcare authorities to assist in stopping this before it starts.",
+      "In accordance with public health guidance, the State of Washington is implementing mandatory social distancing requirements for public and private facilities, including a minimum six-foot spacing standard.",
+      "The order also declares a state of emergency and the necessity of a partial lockdown mandate, wherein a curfew has been established in the State of Washington, and it is strongly recommended that Washingtonians remain out of public as much as possible. Certain public facilities will also no longer be publicly accessible for the duration of the emergency, including schools, where we are working on migration to a virtual education model for Washington public school students.",
+      "We are doing everything we can to keep Washingtonians safe from this looming crisis. We ask that you all play your part in helping keep yourselves, your neighbors, and your families safe."
+    ]
+  },
+  {
+    "id": "stmt-2026-05-3-deathpenalty-referendum",
+    "title": "Governor Montgomery Announces Death Penalty Ban Referendum",
+    "date": "2020-01-01",
+    "category": "Criminal Justice",
+    "summary": "Governor Addison Montgomery has declared a ballot referendum for the end of the death penalty in Washington State in the 2020 elections.",
+    "body": [
+      "It is my responsibility as Governor of this state to protect the citizens therein and utilize the tools at my disposal in a benevolent manner consistent with the high-trust society we have built for ourselves since our admission to the union in 1889.",
+      "I have a responsibility to the citizens of Washington to support and ensure their rights to life and liberty. It is for that reason simply that the state should have no bearing on who lives and who dies, especially through an often unjust criminal \"justice\" system.",
+      "As such, I am proud to sign the bill presented by the state legislature to allow for a ballot referendum in the 2020 general election on the addition of an amendment to the Washington Constitution to ban the death penalty and scrub provisions allowing for capital punishment from state law.",
+      "It is the responsibility of no government to claim the lives of its citizens, no matter how heinous their actions. Capital punishment is a lazy and unfortunate means of refusing to deliver proper justice."
+    ]
+  },
+  {
     "id": "stmt-2026-05-13-abortion-referendum",
     "title": "Governor Montgomery Declares Right To Choose Referendum",
     "date": "2019-12-31",
