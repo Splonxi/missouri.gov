@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { key: "statements", label: "Official Statements", href: "statements.html" },
   { key: "orders",     label: "Executive Orders",    href: "executive-orders.html" },
   { key: "legislation", label: "Legislative Tracker", href: "legislation.html" },
+  { key: "budget",     label: "State Budget",        href: "budget.html" },
   { key: "map",        label: "District Map",        href: "map.html" }
 ];
 
@@ -69,6 +70,7 @@ function renderChrome(activeKey) {
                 <li><a href="executive-orders.html">Executive Orders</a></li>
                 <li><a href="statements.html">Official Statements</a></li>
                 <li><a href="news.html">News &amp; Bulletin</a></li>
+                <li><a href="budget.html">State Budget</a></li>
               </ul>
             </div>
             <div>

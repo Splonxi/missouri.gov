@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State Budget Spreadsheet - Office of the Governor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <section class="tight" style="background:var(--paper); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <span class="section-eyebrow">State Budget</span>
+      <h1 class="mb-0">Budget Spreadsheet</h1>
+      <p class="muted mt-1 mb-0">View the latest state government budget workbook.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="budget-toolbar">
+        <div>
+          <div class="kicker">Embedded workbook</div>
+          <h2 class="mb-0">State Government Budget</h2>
+        </div>
+        <a class="btn ghost" id="budget-open-link" href="#" target="_blank" rel="noopener">Open in Google Sheets</a>
+      </div>
+
+      <div id="budget-frame-wrap" class="budget-frame-wrap">
+        <div class="skeleton">Loading budget spreadsheet...</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script>
+    renderChrome("budget");
+
+    const BUDGET_SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1dkUmD2fv79Dwo8d9xODb83Gz6IQSdpb3mwwWx2hur2Y/edit?usp=sharing";
+
+    function toGoogleSheetsEmbedUrl(url) {
+      if (!url) return "";
+      return url
+        .replace("/edit", "/preview")
+        .replace("/view", "/preview");
+    }
+
+    const frameWrap = document.getElementById("budget-frame-wrap");
+    const openLink = document.getElementById("budget-open-link");
+    const embedUrl = toGoogleSheetsEmbedUrl(BUDGET_SPREADSHEET_URL);
+
+    if (embedUrl) {
+      frameWrap.innerHTML = `
+        <iframe
+          src="${embedUrl}"
+          title="State Government Budget Spreadsheet"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      `;
+      openLink.href = BUDGET_SPREADSHEET_URL;
+    } else {
+      frameWrap.innerHTML = `
+        <div class="callout info mb-0">
+          Add the Google Sheets link to <code>BUDGET_SPREADSHEET_URL</code> in this page to display the embedded budget workbook.
+        </div>
+      `;
+      openLink.remove();
+    }
+  </script>
+</body>
+</html>

@@ -56,6 +56,7 @@ The file must be valid GeoJSON, EPSG:4326 (WGS84), with each feature carrying at
 - Shared JS: `js/main.js`, `js/data-loader.js`
 - Admin panel: `js/admin.js`
 - Map: `js/map.js`
+- Budget spreadsheet: set `BUDGET_SPREADSHEET_URL` in `budget.html` to a shareable Google Sheets link
 
 ## Data files
 
