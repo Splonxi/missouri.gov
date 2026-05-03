@@ -77,7 +77,8 @@ p { margin: 0 0 1em; }
 .site-header .container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
+  max-width: 1440px;
   padding: .85rem 1.5rem;
 }
 
@@ -109,12 +110,13 @@ p { margin: 0 0 1em; }
   display: flex;
   gap: .25rem;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 .site-nav a {
   text-decoration: none;
   color: var(--green-900);
-  font-size: .9rem;
-  padding: .5rem .7rem;
+  font-size: .92rem;
+  padding: .55rem .85rem;
   border-radius: 4px;
   font-weight: 500;
   white-space: nowrap;

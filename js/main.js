@@ -7,11 +7,11 @@
 
 const NAV_ITEMS = [
   { key: "home",       label: "Home",                href: "index.html" },
-  { key: "news",       label: "News",                href: "news.html" },
-  { key: "statements", label: "Statements",          href: "statements.html" },
-  { key: "orders",     label: "Orders",              href: "executive-orders.html" },
-  { key: "legislation", label: "Legislation",        href: "legislation.html" },
-  { key: "budget",     label: "Budget",              href: "budget.html" },
+  { key: "news",       label: "News & Bulletin",     href: "news.html" },
+  { key: "statements", label: "Official Statements", href: "statements.html" },
+  { key: "orders",     label: "Executive Orders",    href: "executive-orders.html" },
+  { key: "legislation", label: "Legislative Tracker", href: "legislation.html" },
+  { key: "budget",     label: "State Budget",        href: "budget.html" },
   { key: "map",        label: "District Map",        href: "map.html" }
 ];
 
