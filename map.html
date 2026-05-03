@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Congressional District Map — Office of the Governor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <section class="tight" style="background:var(--paper); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <span class="section-eyebrow">Congressional Districts</span>
+      <h1 class="mb-0">Washington's 10 Congressional Districts</h1>
+      <p class="muted mt-1 mb-0">Hover or tap a district to see its representative, population, win margin, and racial composition.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div id="placeholder-warning" class="callout info" style="display:none;">
+        <strong>Placeholder boundaries.</strong> The polygons rendered below are simplified
+        rectangles arranged in approximate spatial order. Replace
+        <code>data/wa-congressional-districts.geojson</code> with the official TIGER/Line shapefile
+        (converted to GeoJSON, EPSG:4326) for accurate boundaries.
+      </div>
+
+      <div class="filter-bar" style="margin-bottom:1rem;">
+        <label style="flex-direction:row; align-items:center; gap:.4rem; text-transform:none; letter-spacing:0; font-weight:500;">
+          <input type="radio" name="color-by" value="party" checked> Party (lean)
+        </label>
+        <label style="flex-direction:row; align-items:center; gap:.4rem; text-transform:none; letter-spacing:0; font-weight:500;">
+          <input type="radio" name="color-by" value="margin"> Win margin
+        </label>
+        <label style="flex-direction:row; align-items:center; gap:.4rem; text-transform:none; letter-spacing:0; font-weight:500;">
+          <input type="radio" name="color-by" value="population"> Population deviation
+        </label>
+      </div>
+
+      <div class="map-layout">
+        <div id="map" aria-label="Washington congressional districts map"></div>
+        <aside class="map-side">
+          <div id="district-detail" class="skeleton">Loading district info…</div>
+
+          <hr class="divider">
+          <h4 style="font-family:var(--sans); text-transform:uppercase; letter-spacing:.1em; font-size:.78rem; color:var(--muted);">
+            Delegation party split
+          </h4>
+          <div id="party-chart"></div>
+
+          <h4 style="margin-top:1.5rem; font-family:var(--sans); text-transform:uppercase; letter-spacing:.1em; font-size:.78rem; color:var(--muted);">
+            Population by district
+          </h4>
+          <div id="pop-chart"></div>
+
+          <h4 style="margin-top:1.5rem; font-family:var(--sans); text-transform:uppercase; letter-spacing:.1em; font-size:.78rem; color:var(--muted);">
+            Median household income
+          </h4>
+          <div id="inc-chart"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/main.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/map.js"></script>
+  <script>
+    renderChrome("map");
+    initMap();
+  </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Official Statements — Office of the Governor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <section class="tight" style="background:var(--paper); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <span class="section-eyebrow">Catalog</span>
+      <h1 class="mb-0">Official Statements</h1>
+      <p class="muted mt-1 mb-0">Statements from the Governor on legislation, executive action,
+        and matters of public concern. Each statement is signed.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="filter-bar">
+        <label class="grow">
+          Search
+          <input type="search" id="f-search" placeholder="Search title, body, category…">
+        </label>
+        <label>
+          Category
+          <select id="f-category">
+            <option value="">All</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="results-meta" class="muted mb-2"></div>
+
+      <div id="statements-list" class="card-grid">
+        <div class="skeleton">Loading…</div>
+      </div>
+
+      <div id="statement-view" class="mt-3"></div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script>
+    renderChrome("statements");
+
+    let allStatements = [];
+
+    function render() {
+      const search = document.getElementById("f-search").value;
+      const category = document.getElementById("f-category").value;
+      const filtered = applyFilter(allStatements, { search, filters: { category } });
+      const sorted = sortByDate(filtered, "date");
+
+      document.getElementById("results-meta").textContent =
+        `${sorted.length} of ${allStatements.length} statements shown`;
+
+      const list = document.getElementById("statements-list");
+      if (sorted.length === 0) {
+        list.innerHTML = `<div class="muted center">No statements match these filters.</div>`;
+        return;
+      }
+      list.innerHTML = sorted.map(s => `
+        <article class="card" id="${escapeHTML(s.id)}">
+          <div class="meta">${formatDate(s.date)} · ${escapeHTML(s.category || "")}</div>
+          <h3>${escapeHTML(s.title)}</h3>
+          <p class="excerpt">${escapeHTML(s.summary || "")}</p>
+          <div class="footer">
+            <a href="#" data-stmt="${escapeHTML(s.id)}">Read full statement →</a>
+            &nbsp;·&nbsp;
+            <a href="statement.html?id=${encodeURIComponent(s.id)}" target="_blank">View as letterhead ↗</a>
+          </div>
+        </article>
+      `).join("");
+
+      list.querySelectorAll("[data-stmt]").forEach(a => {
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          const id = a.getAttribute("data-stmt");
+          showFull(allStatements.find(s => s.id === id));
+        });
+      });
+
+      const hash = location.hash.slice(1);
+      if (hash) {
+        const stmt = allStatements.find(s => s.id === hash);
+        if (stmt) showFull(stmt);
+      }
+    }
+
+    function showFull(s) {
+      if (!s) return;
+      const view = document.getElementById("statement-view");
+      const body = (s.body || []).map(p => `<p>${escapeHTML(p)}</p>`).join("");
+      view.innerHTML = `
+        <article class="form-card" style="border-top-color: var(--green-900);">
+          <div class="kicker">${formatDate(s.date)} · ${escapeHTML(s.category || "")}</div>
+          <h2 style="margin:.25rem 0 1rem;">${escapeHTML(s.title)}</h2>
+          ${body}
+          <hr class="divider">
+          <div class="flex" style="align-items:flex-end; gap:1.5rem; flex-wrap:wrap;">
+            <div>
+              <img src="assets/signature.svg" alt="Governor's signature"
+                   style="max-height:64px; max-width:240px; display:block;"
+                   onerror="this.replaceWith(Object.assign(document.createElement('div'),{textContent:'[signature.svg not loaded]', className:'muted', style:'font-style:italic'}))">
+              <div style="border-top:1px solid var(--ink); padding-top:.25rem; font-family:var(--serif); margin-top:.25rem;">
+                <strong id="sig-name">Governor</strong>
+                <div class="muted" style="font-size:.88rem;">Governor of the State of Washington</div>
+              </div>
+            </div>
+            <div style="margin-left:auto;">
+              <a class="btn ghost" href="statement.html?id=${encodeURIComponent(s.id)}" target="_blank">
+                Open letterhead view ↗
+              </a>
+            </div>
+          </div>
+        </article>
+      `;
+      // Pull governor name from site.json into signature block
+      loadData("site").then(site => {
+        const el = document.getElementById("sig-name");
+        if (el) el.textContent = site.governor.name;
+      }).catch(() => {});
+      history.replaceState(null, "", `#${s.id}`);
+      view.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    (async () => {
+      try {
+        allStatements = await loadData("statements");
+        // Build category dropdown
+        const cats = [...new Set(allStatements.map(s => s.category).filter(Boolean))].sort();
+        const sel = document.getElementById("f-category");
+        cats.forEach(c => {
+          const opt = document.createElement("option");
+          opt.value = c; opt.textContent = c;
+          sel.appendChild(opt);
+        });
+        render();
+      } catch (err) {
+        document.getElementById("statements-list").innerHTML =
+          `<div class="callout danger">Could not load statements: ${escapeHTML(err.message)}</div>`;
+      }
+    })();
+
+    ["f-search","f-category"].forEach(id =>
+      document.getElementById(id).addEventListener("input", render)
+    );
+  </script>
+</body>
+</html>

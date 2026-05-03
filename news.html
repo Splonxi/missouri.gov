@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News &amp; Bulletin — Office of the Governor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <section class="tight" style="background:var(--paper); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <span class="section-eyebrow">News &amp; Bulletin</span>
+      <h1 class="mb-0">News from the Office of the Governor</h1>
+      <p class="muted mt-1 mb-0">Press releases, schedule notices, and bulletin items.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="filter-bar">
+        <label class="grow">
+          Search
+          <input type="search" id="f-search" placeholder="Search headlines, body, tags…">
+        </label>
+        <label>
+          Category
+          <select id="f-category">
+            <option value="">All</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="results-meta" class="muted mb-2"></div>
+
+      <div id="news-list">
+        <div class="skeleton">Loading…</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script>
+    renderChrome("news");
+
+    let allNews = [];
+
+    function render() {
+      const search = document.getElementById("f-search").value;
+      const category = document.getElementById("f-category").value;
+      const filtered = applyFilter(allNews, { search, filters: { category } });
+      const sorted = sortByDate(filtered, "date");
+
+      document.getElementById("results-meta").textContent =
+        `${sorted.length} of ${allNews.length} items shown`;
+
+      const list = document.getElementById("news-list");
+      if (sorted.length === 0) {
+        list.innerHTML = `<div class="muted center">No news items match these filters.</div>`;
+        return;
+      }
+      list.innerHTML = sorted.map(n => `
+        <article id="${escapeHTML(n.id)}" class="form-card mb-2" style="border-top-color: var(--gold-500);">
+          <div class="meta muted" style="font-size:.85rem; text-transform: uppercase; letter-spacing: .08em;">
+            ${formatDate(n.date)} · ${escapeHTML(n.category || "")}
+          </div>
+          <h3 style="margin:.25rem 0 .5rem;">${escapeHTML(n.title)}</h3>
+          <p>${escapeHTML(n.excerpt || "")}</p>
+          ${n.body ? `<details style="margin-top:.5rem;">
+            <summary style="cursor:pointer; color: var(--green-800);">Read full bulletin</summary>
+            <div style="margin-top:.75rem; padding-top:.75rem; border-top:1px solid var(--line);">
+              ${escapeHTML(n.body).split("\n\n").map(p => `<p>${p}</p>`).join("")}
+            </div>
+          </details>` : ""}
+          ${(n.tags || []).length ? `<div class="tag-row mt-2">
+            ${n.tags.map(t => `<span class="pill">${escapeHTML(t)}</span>`).join(" ")}
+          </div>` : ""}
+        </article>
+      `).join("");
+
+      const hash = location.hash.slice(1);
+      if (hash) {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    (async () => {
+      try {
+        allNews = await loadData("news");
+        const cats = [...new Set(allNews.map(n => n.category).filter(Boolean))].sort();
+        const sel = document.getElementById("f-category");
+        cats.forEach(c => {
+          const opt = document.createElement("option");
+          opt.value = c; opt.textContent = c;
+          sel.appendChild(opt);
+        });
+        render();
+      } catch (err) {
+        document.getElementById("news-list").innerHTML =
+          `<div class="callout danger">Could not load news: ${escapeHTML(err.message)}</div>`;
+      }
+    })();
+
+    ["f-search","f-category"].forEach(id =>
+      document.getElementById(id).addEventListener("input", render)
+    );
+  </script>
+</body>
+</html>

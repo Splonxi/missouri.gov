@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legislative Tracker — Office of the Governor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <section class="tight" style="background:var(--paper); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <span class="section-eyebrow">Legislative Tracker</span>
+      <h1 class="mb-0">Bills the Governor is following</h1>
+      <p class="muted mt-1 mb-0">Searchable index of legislation actively in motion. Updated when the
+        Office takes a position or when a bill reaches the desk.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="filter-bar">
+        <label class="grow">
+          Search
+          <input type="search" id="f-search" placeholder="Search bill number, sponsor, topic, summary…">
+        </label>
+        <label>
+          Chamber
+          <select id="f-chamber">
+            <option value="">All</option>
+            <option>House</option>
+            <option>Senate</option>
+          </select>
+        </label>
+        <label>
+          Status
+          <select id="f-status">
+            <option value="">All</option>
+            <option value="in-committee">In committee</option>
+            <option value="on-governors-desk">On Governor's desk</option>
+            <option value="signed">Signed</option>
+            <option value="vetoed">Vetoed</option>
+            <option value="partial-veto">Partial veto</option>
+            <option value="stalled">Stalled</option>
+          </select>
+        </label>
+        <label>
+          Position
+          <select id="f-position">
+            <option value="">All</option>
+            <option>support</option>
+            <option>oppose</option>
+            <option>monitoring</option>
+            <option>signed</option>
+            <option>partial-veto</option>
+            <option>vetoed</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="results-meta" class="muted mb-2"></div>
+
+      <table class="data" id="bills-table">
+        <thead>
+          <tr>
+            <th>Bill</th>
+            <th>Title</th>
+            <th>Sponsor</th>
+            <th>Status</th>
+            <th>Position</th>
+            <th>Last action</th>
+          </tr>
+        </thead>
+        <tbody><tr><td colspan="6" class="skeleton">Loading…</td></tr></tbody>
+      </table>
+
+      <div id="bill-detail" class="mt-3"></div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script>
+    renderChrome("legislation");
+
+    let allBills = [];
+
+    function positionPill(pos) {
+      if (!pos) return '<span class="pill gray">—</span>';
+      const map = {
+        support:        ["green", "Support"],
+        oppose:         ["red",   "Oppose"],
+        monitoring:     ["gold",  "Monitoring"],
+        signed:         ["green", "Signed"],
+        "partial-veto": ["red",   "Partial veto"],
+        vetoed:         ["red",   "Vetoed"]
+      };
+      const [cls, label] = map[pos] || ["gray", pos];
+      return `<span class="pill ${cls}">${escapeHTML(label)}</span>`;
+    }
+
+    function render() {
+      const search = document.getElementById("f-search").value;
+      const chamber = document.getElementById("f-chamber").value;
+      const status = document.getElementById("f-status").value;
+      const position = document.getElementById("f-position").value;
+
+      const filtered = applyFilter(allBills, {
+        search,
+        filters: { chamber, status, governorPosition: position }
+      });
+
+      const sorted = sortByDate(filtered, "lastAction");
+
+      document.getElementById("results-meta").textContent =
+        `${sorted.length} of ${allBills.length} bills shown`;
+
+      const tbody = document.querySelector("#bills-table tbody");
+      if (sorted.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="muted center">No bills match these filters.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = sorted.map(b => `
+        <tr id="${escapeHTML(b.id)}">
+          <td><strong><a href="#" data-bill="${escapeHTML(b.id)}">${escapeHTML(b.id)}</a></strong>
+              <div class="muted" style="font-size:.8rem;">${escapeHTML(b.session || "")}</div></td>
+          <td>${escapeHTML(b.title)}</td>
+          <td>${escapeHTML(b.sponsor || "")}</td>
+          <td>${statusPill(b.status)}</td>
+          <td>${positionPill(b.governorPosition)}</td>
+          <td class="muted">${formatDateShort(b.lastAction)}</td>
+        </tr>
+      `).join("");
+
+      tbody.querySelectorAll("[data-bill]").forEach(a => {
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          const id = a.getAttribute("data-bill");
+          showDetail(allBills.find(b => b.id === id));
+        });
+      });
+
+      // Auto-show if URL hash matches a bill
+      const hash = location.hash.slice(1);
+      if (hash) {
+        const bill = allBills.find(b => b.id === hash);
+        if (bill) showDetail(bill);
+      }
+    }
+
+    function showDetail(b) {
+      if (!b) { document.getElementById("bill-detail").innerHTML = ""; return; }
+      const topics = (b.topics || []).map(t =>
+        `<span class="pill">${escapeHTML(t)}</span>`
+      ).join(" ");
+      document.getElementById("bill-detail").innerHTML = `
+        <div class="form-card">
+          <div class="flex between align-center" style="flex-wrap:wrap;">
+            <div>
+              <div class="kicker">${escapeHTML(b.session || "")} · ${escapeHTML(b.chamber || "")}</div>
+              <h2 style="margin:.25rem 0 .15rem;">${escapeHTML(b.id)} — ${escapeHTML(b.title)}</h2>
+              <div class="muted">Sponsor: ${escapeHTML(b.sponsor || "—")}</div>
+            </div>
+            <div class="tag-row">${statusPill(b.status)} ${positionPill(b.governorPosition)}</div>
+          </div>
+          <hr class="divider">
+          <p>${escapeHTML(b.summary || "")}</p>
+          <p><strong>Last action:</strong> ${formatDate(b.lastAction)} —
+             <span class="muted">${escapeHTML(b.lastActionText || "")}</span></p>
+          <p><strong>Introduced:</strong> ${formatDate(b.introduced)}</p>
+          ${topics ? `<div class="tag-row mt-2">${topics}</div>` : ""}
+        </div>
+      `;
+      history.replaceState(null, "", `#${b.id}`);
+      document.getElementById("bill-detail").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    (async () => {
+      try {
+        allBills = await loadData("bills");
+        render();
+      } catch (err) {
+        document.querySelector("#bills-table tbody").innerHTML =
+          `<tr><td colspan="6"><div class="callout danger">Could not load bills: ${escapeHTML(err.message)}</div></td></tr>`;
+      }
+    })();
+
+    ["f-search","f-chamber","f-status","f-position"].forEach(id =>
+      document.getElementById(id).addEventListener("input", render)
+    );
+  </script>
+</body>
+</html>

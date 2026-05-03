@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Office of the Governor — State of Washington</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
+</head>
+<body>
+  <div id="chrome-header"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="kicker" style="color: var(--gold-300);">Welcome</span>
+      <h1 id="hero-headline">A government that meets the moment for every Washingtonian.</h1>
+      <p class="lede" id="hero-lede">From the San Juans to the Palouse, the work of state government is to keep our communities safe, our economy moving, and our promises to one another.</p>
+      <div class="actions">
+        <a class="btn gold" id="hero-primary" href="statements.html">Read the Governor's latest statement</a>
+        <a class="btn ghost" id="hero-secondary" href="legislation.html" style="color:#fff; border-color:#fff;">Track legislation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT THE GOVERNOR -->
+  <section id="about">
+    <div class="container">
+      <span class="section-eyebrow">About the Governor</span>
+      <hr class="gold-rule">
+      <div class="governor-card">
+        <div class="portrait">
+          <!-- Drop a file at /assets/governor-portrait.jpg to populate. -->
+          <img src="assets/photos/governor-portrait.jpg" alt="Portrait of the Governor"
+               onerror="this.remove(); this.parentNode.insertAdjacentText('beforeend','Portrait placeholder — drop assets/governor-portrait.jpg here');">
+        </div>
+        <div>
+          <h2 class="name" id="gov-name">Governor</h2>
+          <div class="role" id="gov-role">Governor of the State of Washington</div>
+          <div class="bio" id="gov-bio">
+            <p class="skeleton">Loading biography…</p>
+          </div>
+          <p class="mt-2">
+            <a class="btn ghost" href="statements.html">Official statements</a>
+            <a class="btn ghost" href="executive-orders.html">Executive orders</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt tight">
+    <div class="container">
+      <span class="section-eyebrow">Across our State</span>
+      <hr class="gold-rule">
+      <div class="photo-grid">
+        <div data-slot data-src="assets/photos/seattle.webp"  data-label="Seattle skyline" data-class="wide"></div>
+        <div data-slot data-src="assets/photos/rainier.jpg"  data-label="Mt. Rainier"></div>
+        <div data-slot data-src="assets/photos/spokane.jpg"  data-label="Spokane"></div>
+        <div data-slot data-src="assets/photos/sanjuans.jpg" data-label="The San Juan Islands"></div>
+        <div data-slot data-src="assets/photos/olympics.jpg" data-label="The Olympic Peninsula"></div>
+        <div data-slot data-src="assets/photos/palouse.jpg"  data-label="The Palouse"></div>
+        <div data-slot data-src="assets/photos/capitol.jpg"  data-label="The Legislative Building, Olympia" data-class="wide"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST FROM THE OFFICE -->
+  <section>
+    <div class="container">
+      <div class="flex between align-center" style="flex-wrap:wrap;">
+        <div>
+          <span class="section-eyebrow">From the Office of the Governor</span>
+          <h2 class="mb-0">Latest news &amp; statements</h2>
+        </div>
+        <a href="news.html" class="btn ghost">All news →</a>
+      </div>
+      <hr class="gold-rule">
+      <div class="card-grid" id="latest-mix">
+        <div class="skeleton">Loading latest items…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGISLATIVE PRIORITIES SNIPPET -->
+  <section class="alt">
+    <div class="container">
+      <span class="section-eyebrow">In the Legislature</span>
+      <h2>Bills the Governor is watching</h2>
+      <hr class="gold-rule">
+      <div id="legislative-snippet">
+        <div class="skeleton">Loading legislation…</div>
+      </div>
+      <p class="mt-3"><a class="btn" href="legislation.html">Open the Legislative Tracker</a></p>
+    </div>
+  </section>
+
+  <!-- DEEP-SECTION: connect WA imagery -->
+  <section class="deep">
+    <div class="container">
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items:center;" id="deep-grid">
+        <div>
+          <span class="kicker" style="color: var(--gold-300);">A state of two horizons</span>
+          <h2>From the Salish Sea to the Selkirk Mountains.</h2>
+          <p style="font-size:1.05rem; opacity:.92;">
+            Washington is fishermen on the docks at Anacortes, wheat farmers along the Snake River,
+            software engineers in South Lake Union, ranchers in the Methow, students at Pullman and
+            Cheney, biotech researchers on Mercer Island, and shipyard welders in Bremerton. This
+            office serves every one of them.
+          </p>
+          <blockquote class="pull" style="color:#fff; border-color: var(--gold-500);">
+            We are bound together by mountains, by rivers, by ferries — and by the simple promise
+            that government is a thing we build for one another.
+          </blockquote>
+        </div>
+        <div data-slot data-src="assets/photos/ferry.jpg" data-label="A ferry crossing Puget Sound" data-class="tall"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="chrome-footer"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script>
+    renderChrome("home");
+
+    // Mount photo slots
+    document.querySelectorAll("[data-slot]").forEach(el => {
+      const src = el.getAttribute("data-src");
+      const label = el.getAttribute("data-label");
+      const cls = el.getAttribute("data-class") || "";
+      el.outerHTML = photoSlot({ src, label, className: cls });
+    });
+
+    (async () => {
+      // Site copy + governor bio
+      try {
+        const site = await loadData("site");
+        document.getElementById("hero-headline").textContent = site.hero.headline;
+        document.getElementById("hero-lede").textContent = site.hero.lede;
+        document.getElementById("hero-primary").textContent = site.hero.primaryCta.label;
+        document.getElementById("hero-primary").href = site.hero.primaryCta.href;
+        document.getElementById("hero-secondary").textContent = site.hero.secondaryCta.label;
+        document.getElementById("hero-secondary").href = site.hero.secondaryCta.href;
+
+        document.getElementById("gov-name").textContent = site.governor.name;
+        document.getElementById("gov-role").textContent =
+          `${site.governor.title} · ${site.governor.tenure}`;
+        document.getElementById("gov-bio").innerHTML = site.governor.bio
+          .map(p => `<p>${escapeHTML(p)}</p>`).join("");
+
+        // Update title
+        document.title = `${site.governor.shortName} — Office of the Governor, Washington State`;
+      } catch (err) {
+        document.getElementById("gov-bio").innerHTML =
+          `<p class="muted">Could not load site copy: ${escapeHTML(err.message)}</p>`;
+      }
+
+      // Latest mix: 3 newest from news + statements combined
+      try {
+        const [news, statements] = await Promise.all([
+          loadData("news"), loadData("statements")
+        ]);
+        const mix = sortByDate([
+          ...news.map(n => ({ kind: "News",      ...n, href: `news.html#${n.id}` })),
+          ...statements.map(s => ({ kind: "Statement", ...s, href: `statements.html#${s.id}` }))
+        ]).slice(0, 3);
+
+        document.getElementById("latest-mix").innerHTML = mix.map(item => `
+          <article class="card">
+            <div class="meta">${escapeHTML(item.kind)} · ${formatDate(item.date)}</div>
+            <h3>${escapeHTML(item.title)}</h3>
+            <p class="excerpt">${escapeHTML(item.excerpt || item.summary || "")}</p>
+            <div class="footer"><a href="${item.href}">Read more →</a></div>
+          </article>
+        `).join("");
+      } catch (err) {
+        document.getElementById("latest-mix").innerHTML =
+          `<div class="callout danger">Could not load news/statements: ${escapeHTML(err.message)}</div>`;
+      }
+
+      // Legislative snippet: top 4 bills
+      try {
+        const bills = await loadData("bills");
+        const top = sortByDate(bills, "lastAction").slice(0, 4);
+        const rows = top.map(b => `
+          <tr>
+            <td><strong><a href="legislation.html#${escapeHTML(b.id)}">${escapeHTML(b.id)}</a></strong></td>
+            <td>${escapeHTML(b.title)}</td>
+            <td>${statusPill(b.status)}</td>
+            <td class="muted">${formatDateShort(b.lastAction)}</td>
+          </tr>
+        `).join("");
+        document.getElementById("legislative-snippet").innerHTML = `
+          <table class="data">
+            <thead><tr><th>Bill</th><th>Title</th><th>Status</th><th>Last action</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch (err) {
+        document.getElementById("legislative-snippet").innerHTML =
+          `<div class="callout danger">Could not load legislation: ${escapeHTML(err.message)}</div>`;
+      }
+    })();
+  </script>
+</body>
+</html>
