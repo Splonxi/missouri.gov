@@ -11,8 +11,8 @@
     ]
   },
   "hero": {
-    "headline": "A government that meets the moment for every Washingtonian.",
-    "lede": "From the San Juans to the Palouse, the work of state government is to keep our communities safe, our economy moving, and our promises to one another.",
+    "headline": "Welcome To The "Show Me" State.",
+    "lede": "Missouri is home to millions of hardworking Americans. Governor Greico is working every day to make their lives easier.",
     "primaryCta":   { "label": "Read the Governor's latest statement", "href": "statements.html" },
     "secondaryCta": { "label": "Track legislation",                    "href": "legislation.html" }
   },
