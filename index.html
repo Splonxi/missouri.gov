@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Office of the Governor — State of Washington</title>
+  <title>Office of the Governor of Missouri</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="assets/stateseal.svg">
 </head>
@@ -14,10 +14,10 @@
   <section class="hero">
     <div class="container">
       <span class="kicker" style="color: var(--gold-300);">Welcome</span>
-      <h1 id="hero-headline">A government that meets the moment for every Washingtonian.</h1>
-      <p class="lede" id="hero-lede">From the San Juans to the Palouse, the work of state government is to keep our communities safe, our economy moving, and our promises to one another.</p>
+      <h1 id="hero-headline">Welcome To The "Show Me" State.</h1>
+      <p class="lede" id="hero-lede">Missouri is home to millions of proud, hardworking Americans. Governor Greico is working every day to make their life easier.</p>
       <div class="actions">
-        <a class="btn gold" id="hero-primary" href="statements.html">Read the Governor's latest statement</a>
+        <a class="btn gold" id="hero-primary" href="executive-orders.html">See the Governor's last orders</a>
         <a class="btn ghost" id="hero-secondary" href="legislation.html" style="color:#fff; border-color:#fff;">Track legislation</a>
       </div>
     </div>
@@ -36,7 +36,7 @@
         </div>
         <div>
           <h2 class="name" id="gov-name">Governor</h2>
-          <div class="role" id="gov-role">Governor of the State of Washington</div>
+          <div class="role" id="gov-role">Governor of the State of Missouri</div>
           <div class="bio" id="gov-bio">
             <p class="skeleton">Loading biography…</p>
           </div>
@@ -45,22 +45,6 @@
             <a class="btn ghost" href="executive-orders.html">Executive orders</a>
           </p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="alt tight">
-    <div class="container">
-      <span class="section-eyebrow">Across our State</span>
-      <hr class="gold-rule">
-      <div class="photo-grid">
-        <div data-slot data-src="assets/photos/seattle.webp"  data-label="Seattle skyline" data-class="wide"></div>
-        <div data-slot data-src="assets/photos/rainier.jpg"  data-label="Mt. Rainier"></div>
-        <div data-slot data-src="assets/photos/spokane.jpg"  data-label="Spokane"></div>
-        <div data-slot data-src="assets/photos/sanjuans.jpg" data-label="The San Juan Islands"></div>
-        <div data-slot data-src="assets/photos/olympics.jpg" data-label="The Olympic Peninsula"></div>
-        <div data-slot data-src="assets/photos/palouse.jpg"  data-label="The Palouse"></div>
-        <div data-slot data-src="assets/photos/capitol.jpg"  data-label="The Legislative Building, Olympia" data-class="wide"></div>
       </div>
     </div>
   </section>
@@ -86,7 +70,7 @@
   <section class="alt">
     <div class="container">
       <span class="section-eyebrow">In the Legislature</span>
-      <h2>Bills the Governor is watching</h2>
+      <h2>Recent bills the Governor is keeping an eye on</h2>
       <hr class="gold-rule">
       <div id="legislative-snippet">
         <div class="skeleton">Loading legislation…</div>
@@ -95,25 +79,23 @@
     </div>
   </section>
 
-  <!-- DEEP-SECTION: connect WA imagery -->
   <section class="deep">
     <div class="container">
       <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items:center;" id="deep-grid">
         <div>
-          <span class="kicker" style="color: var(--gold-300);">A state of two horizons</span>
-          <h2>From the Salish Sea to the Selkirk Mountains.</h2>
+          <span class="kicker" style="color: var(--gold-300);">The Gateway To The West.</span>
+          <h2>From Kansas City to St. Louis,</h2>
           <p style="font-size:1.05rem; opacity:.92;">
-            Washington is fishermen on the docks at Anacortes, wheat farmers along the Snake River,
-            software engineers in South Lake Union, ranchers in the Methow, students at Pullman and
-            Cheney, biotech researchers on Mercer Island, and shipyard welders in Bremerton. This
-            office serves every one of them.
+            Missouri represents the people of this great country like no other. We blend strong, cultural epicenters in our
+            urban cores with sweeping plains filled with wildlife and agriculture. Anyone is free to call Missouri their
+            home.
           </p>
           <blockquote class="pull" style="color:#fff; border-color: var(--gold-500);">
-            We are bound together by mountains, by rivers, by ferries — and by the simple promise
-            that government is a thing we build for one another.
+            Missouri is the strongest example of what we can achieve if we put our minds
+            towards success.
           </blockquote>
         </div>
-        <div data-slot data-src="assets/photos/ferry.jpg" data-label="A ferry crossing Puget Sound" data-class="tall"></div>
+        <div data-slot data-src="assets/photos/ferry.jpg" data-label="The Gateway Arch" data-class="tall"></div>
       </div>
     </div>
   </section>
@@ -151,7 +133,7 @@
           .map(p => `<p>${escapeHTML(p)}</p>`).join("");
 
         // Update title
-        document.title = `${site.governor.shortName} — Office of the Governor, Washington State`;
+        document.title = `${site.governor.shortName} — Office of the Governor, State of Missouri`;
       } catch (err) {
         document.getElementById("gov-bio").innerHTML =
           `<p class="muted">Could not load site copy: ${escapeHTML(err.message)}</p>`;
